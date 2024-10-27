@@ -114,7 +114,8 @@ public class NpgsqlTypeMappingSource : RelationalTypeMappingSource
     private readonly NpgsqlMacaddr8TypeMapping _macaddr8 = NpgsqlMacaddr8TypeMapping.Default;
     private readonly NpgsqlInetTypeMapping _inetAsIPAddress = NpgsqlInetTypeMapping.Default;
     private readonly NpgsqlInetTypeMapping _inetAsNpgsqlInet = new(typeof(NpgsqlInet));
-    private readonly NpgsqlCidrTypeMapping _cidr = NpgsqlCidrTypeMapping.Default;
+    private readonly NpgsqlCidrTypeMapping _cidrAsIPNetwork = NpgsqlCidrTypeMapping.Default;
+    private readonly NpgsqlLegacyCidrTypeMapping _cidrAsNpgsqlCidr = NpgsqlLegacyCidrTypeMapping.Default;
 
     // Built-in geometric types
     private readonly NpgsqlPointTypeMapping _point = NpgsqlPointTypeMapping.Default;
@@ -257,7 +258,7 @@ public class NpgsqlTypeMappingSource : RelationalTypeMappingSource
             { "macaddr", [_macaddr] },
             { "macaddr8", [_macaddr8] },
             { "inet", [_inetAsIPAddress, _inetAsNpgsqlInet] },
-            { "cidr", [_cidr] },
+            { "cidr", [_cidrAsIPNetwork, _cidrAsNpgsqlCidr] },
             { "point", [_point] },
             { "box", [_box] },
             { "line", [_line] },
@@ -320,7 +321,8 @@ public class NpgsqlTypeMappingSource : RelationalTypeMappingSource
             { typeof(PhysicalAddress), _macaddr },
             { typeof(IPAddress), _inetAsIPAddress },
             { typeof(NpgsqlInet), _inetAsNpgsqlInet },
-            { typeof(NpgsqlCidr), _cidr },
+            { typeof(IPNetwork), _cidrAsIPNetwork },
+            { typeof(NpgsqlCidr), _cidrAsNpgsqlCidr },
             { typeof(BitArray), _varbit },
             { typeof(ImmutableDictionary<string, string>), _immutableHstore },
             { typeof(Dictionary<string, string>), _hstore },

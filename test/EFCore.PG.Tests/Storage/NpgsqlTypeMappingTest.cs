@@ -282,10 +282,20 @@ public class NpgsqlTypeMappingTest
 
     [Fact]
     public void GenerateSqlLiteral_returns_cidr_literal()
+        => Assert.Equal("CIDR '192.168.1.0/24'", GetMapping("cidr").GenerateSqlLiteral(new IPNetwork(IPAddress.Parse("192.168.1.0"), 24)));
+
+    [Fact]
+    public void GenerateSqlLiteral_returns_legacy_cidr_literal()
         => Assert.Equal("CIDR '192.168.1.0/24'", GetMapping("cidr").GenerateSqlLiteral(new NpgsqlCidr(IPAddress.Parse("192.168.1.0"), 24)));
 
     [Fact]
     public void GenerateCodeLiteral_returns_cidr_literal()
+        => Assert.Equal(
+            """new System.Net.IPNetwork(System.Net.IPAddress.Parse("192.168.1.0"), 24)""",
+            CodeLiteral(new IPNetwork(IPAddress.Parse("192.168.1.0"), 24)));
+
+    [Fact]
+    public void GenerateCodeLiteral_returns_legacy_cidr_literal()
         => Assert.Equal(
             """new NpgsqlTypes.NpgsqlCidr(System.Net.IPAddress.Parse("192.168.1.0"), (byte)24)""",
             CodeLiteral(new NpgsqlCidr(IPAddress.Parse("192.168.1.0"), 24)));
